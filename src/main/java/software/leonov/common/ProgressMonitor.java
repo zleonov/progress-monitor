@@ -1,4 +1,4 @@
-package software.leonov.progress;
+package software.leonov.common;
 
 import java.util.LinkedList;
 import java.util.List;

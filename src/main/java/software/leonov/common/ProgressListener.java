@@ -1,4 +1,4 @@
-package software.leonov.progress;
+package software.leonov.common;
 /**
  * A listener interface for handling progress changes when {@link ProgressMonitor monitoring} long running operations.
  * 
