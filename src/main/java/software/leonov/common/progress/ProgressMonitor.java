@@ -80,12 +80,12 @@ public class ProgressMonitor {
     private final long minStepSize;
     private final long maxStepSize;
 
-    private final List<ProgressListener> listeners = new LinkedList<>();
-
     private long           progress = 0;
     private long           step     = 0;
     private Optional<Long> maximum  = Optional.empty();
     private boolean        done     = false;
+
+    private final List<ProgressListener> listeners = new LinkedList<>();
 
     private ProgressMonitor(final long minStepSize, final long maxStepSize) {
         if (minStepSize <= 0)
