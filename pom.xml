@@ -3,8 +3,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>software.leonov.common</groupId>
-    <artifactId>JProgressMonitor</artifactId>
+    <groupId>software.leonov.progress</groupId>
+    <artifactId>progress-monitor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
@@ -24,6 +24,27 @@
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
+            <version>1.1.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.truth.extensions</groupId>
+            <artifactId>truth-java8-extension</artifactId>
+            <version>1.1.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
@@ -90,7 +111,7 @@
                     </links>
                     <!-- Snippet syntax highlighting -->
                     <additionalOptions>--allow-script-in-comments</additionalOptions>
-                    <footer>${highlightjs}</footer>
+                    <footer>${primejs}</footer>
                 </configuration>
                 <executions>
                     <execution>
