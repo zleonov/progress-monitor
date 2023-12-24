@@ -15,8 +15,8 @@
         <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
     </properties>
 
-    <name>ProgressMonitor</name>
-    <description>A progress monitor of long running operations.</description>
+    <name>Java Progress Monitor</name>
+    <description>Monitor the progress of long running operations in Java.</description>
 
     <licenses>
         <license>
