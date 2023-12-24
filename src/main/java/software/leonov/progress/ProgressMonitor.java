@@ -1,4 +1,4 @@
-package software.leonov.common.progress;
+package software.leonov.progress;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,8 +10,8 @@ import java.util.Optional;
  * A {@code ProgressMonitor} can be used to track the progress of a long running operation.
  * <p>
  * This class can be instantiated by calling the {@link #create()}, {@link #withConstantStepSize(long)}, or
- * {@link #withMinMaxSize(long, long)} methods, followed by {@link #addProgressListener(ProgressListener) adding} one or
- * more {@link ProgressListener}s.
+ * {@link #withMinMaxStepSize(long, long)} methods, followed by {@link #addProgressListener(ProgressListener) adding}
+ * one or more {@link ProgressListener}s.
  * <p>
  * <b>Basic usage:</b>
  *
@@ -29,9 +29,8 @@ import java.util.Optional;
  * <b>Maximum value:</b>
  * <p>
  * Specifying the {@link #setMaximum(long) maximum} value is not mandatory. However, if specified, it's important to
- * note that the progress count cannot surpass the maximum value. If the initially set value proves to be
- * underestimated, it should be adjusted to prevent an {@link IllegalArgumentException} when the progress count
- * surpasses it.
+ * note that the progress count cannot surpass the maximum value. If the initial value proves to be underestimated, it
+ * should be adjusted to prevent an {@link IllegalArgumentException} when the progress count surpasses it.
  * <p>
  * <b>{@code ProgressEvent}s and step size:</b>
  * <p>
@@ -46,21 +45,20 @@ import java.util.Optional;
  * operation might raise an exception, it may be appropriate to call {@code completed} within the finally clause of a
  * try statement. Calling {@code completed} multiple times is explicitly permitted and will have no subsequent effect.
  * Attempts to modify the progress count after calling {@code completed} will result in an {@code
- * IllegalStateException}.
+ * IllegalStateException} until it is {@link #reset() reset}.
  * <p>
  * <b>Thread safety:</b>
  * <p>
  * This class is not thread safe. In a concurrent environment access to this class must be synchronized externally.
  * Typically only the {@link #increment()} or {@link #setProgress(long)} method are called while the operation is in
- * progress. A simple synchronized block is usually sufficient to ensure thread safety in most use cases:
+ * progress. A simple synchronized block is usually sufficient to ensure thread safety for most use cases:
  *
  * <pre><code class="line-numbers match-braces language-java">
- * while (...) {
  *     ...
- *     synchronized(this) {
+ *     synchronized(...) {
  *         progress.increment();
  *     }
- * }
+ *     ...
  * </code></pre>
  *
  * @author Zhenya Leonov
@@ -105,9 +103,11 @@ public class ProgressMonitor {
      * 
      * @param minStepSize the minimum step size
      * @param maxStepSize the maximum step size
+     * @throws IllegalArgumentException if {@code minStepSize} <= 0, {@code maxStepSize} <= 0, or {@code maxStepSize} <
+     *                                  {@code minMaxSize}
      * @return a new {@code ProgressMonitor} with the specified minimum and maximum step size
      */
-    public static ProgressMonitor withMinMaxSize(final long minStepSize, final long maxStepSize) {
+    public static ProgressMonitor withMinMaxStepSize(final long minStepSize, final long maxStepSize) {
         return new ProgressMonitor(minStepSize, maxStepSize);
     }
 
@@ -239,7 +239,8 @@ public class ProgressMonitor {
      * the final {@link ProgressEvent} if necessary. Logically this signifies the end of the operation.
      * <p>
      * Calling this method multiple times is always permitted and will have no subsequent effect. Any further attempts to
-     * modify the state of this {@code ProgressMonitor} will result in an {@code IllegalStateException}.
+     * modify the state of this {@code ProgressMonitor} will result in an {@code IllegalStateException} until it is
+     * {@link #reset() reset}.
      */
     public void completed() {
         if (done)
@@ -258,6 +259,24 @@ public class ProgressMonitor {
      */
     public boolean isDone() {
         return done;
+    }
+
+    /**
+     * Resets this {@code ProgressMonitor} its initial state, retaining all added {@link ProgressListener}s and the
+     * {@link #getMaximum() maximum} value. After this call returns {@link #isDone()} will return {@code false} and
+     * {@link #getProgress()} will return {@code 0}.
+     * 
+     * @return this {@code ProgressMonitor} instance
+     */
+    public ProgressMonitor reset() {
+        progress  = 0;
+        this.step = minStepSize;
+        done      = false;
+        return this;
+    }
+
+    long getCurrentStepSize() {
+        return step;
     }
 
     private void publish() {
@@ -285,7 +304,6 @@ public class ProgressMonitor {
         public Optional<Long> getMaximum() {
             return maximum;
         }
-
     }
 
 }

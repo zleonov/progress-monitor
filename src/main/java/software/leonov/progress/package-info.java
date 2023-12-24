@@ -1,4 +1,4 @@
 /**
  * Core classes and interfaces.
  */
-package software.leonov.common.progress;
+package software.leonov.progress;

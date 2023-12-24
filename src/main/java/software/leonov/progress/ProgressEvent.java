@@ -1,4 +1,4 @@
-package software.leonov.common.progress;
+package software.leonov.progress;
 
 import java.util.Optional;
 
