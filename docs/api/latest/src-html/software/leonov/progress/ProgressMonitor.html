@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <title>Source code</title>
-<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
 <body>
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package software.leonov.common.progress;<a name="line.1"></a>
+<pre><span class="sourceLineNo">001</span>package software.leonov.progress;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import static java.util.Objects.requireNonNull;<a name="line.3"></a>
 <span class="sourceLineNo">004</span><a name="line.4"></a>
@@ -18,8 +18,8 @@
 <span class="sourceLineNo">010</span> * A {@code ProgressMonitor} can be used to track the progress of a long running operation.<a name="line.10"></a>
 <span class="sourceLineNo">011</span> * &lt;p&gt;<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * This class can be instantiated by calling the {@link #create()}, {@link #withConstantStepSize(long)}, or<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * {@link #withMinMaxSize(long, long)} methods, followed by {@link #addProgressListener(ProgressListener) adding} one or<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * more {@link ProgressListener}s.<a name="line.14"></a>
+<span class="sourceLineNo">013</span> * {@link #withMinMaxStepSize(long, long)} methods, followed by {@link #addProgressListener(ProgressListener) adding}<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * one or more {@link ProgressListener}s.<a name="line.14"></a>
 <span class="sourceLineNo">015</span> * &lt;p&gt;<a name="line.15"></a>
 <span class="sourceLineNo">016</span> * &lt;b&gt;Basic usage:&lt;/b&gt;<a name="line.16"></a>
 <span class="sourceLineNo">017</span> *<a name="line.17"></a>
@@ -37,85 +37,85 @@
 <span class="sourceLineNo">029</span> * &lt;b&gt;Maximum value:&lt;/b&gt;<a name="line.29"></a>
 <span class="sourceLineNo">030</span> * &lt;p&gt;<a name="line.30"></a>
 <span class="sourceLineNo">031</span> * Specifying the {@link #setMaximum(long) maximum} value is not mandatory. However, if specified, it's important to<a name="line.31"></a>
-<span class="sourceLineNo">032</span> * note that the progress count cannot surpass the maximum value. If the initially set value proves to be<a name="line.32"></a>
-<span class="sourceLineNo">033</span> * underestimated, it should be adjusted to prevent an {@link IllegalArgumentException} when the progress count<a name="line.33"></a>
-<span class="sourceLineNo">034</span> * surpasses it.<a name="line.34"></a>
-<span class="sourceLineNo">035</span> * &lt;p&gt;<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * &lt;b&gt;{@code ProgressEvent}s and step size:&lt;/b&gt;<a name="line.36"></a>
-<span class="sourceLineNo">037</span> * &lt;p&gt;<a name="line.37"></a>
-<span class="sourceLineNo">038</span> * {@link ProgressEvent}s are {@link ProgressListener#progressChanged(ProgressEvent) published} commensurate with the<a name="line.38"></a>
-<span class="sourceLineNo">039</span> * step size specified at creation. Duplicate events will never be published. Unless the step size is<a name="line.39"></a>
-<span class="sourceLineNo">040</span> * {@link #withConstantStepSize(long) constant}, it will progressively increase from the minimum to the maximum<a name="line.40"></a>
-<span class="sourceLineNo">041</span> * specified size. Note that setting or adjusting the maximum value may recalculate the step size.<a name="line.41"></a>
-<span class="sourceLineNo">042</span> * &lt;p&gt;<a name="line.42"></a>
-<span class="sourceLineNo">043</span> * &lt;b&gt;Progress completion:&lt;/b&gt;<a name="line.43"></a>
-<span class="sourceLineNo">044</span> * &lt;p&gt;<a name="line.44"></a>
-<span class="sourceLineNo">045</span> * In typical scenarios {@link #completed()} should be called when the operation has concluded. In cases where the<a name="line.45"></a>
-<span class="sourceLineNo">046</span> * operation might raise an exception, it may be appropriate to call {@code completed} within the finally clause of a<a name="line.46"></a>
-<span class="sourceLineNo">047</span> * try statement. Calling {@code completed} multiple times is explicitly permitted and will have no subsequent effect.<a name="line.47"></a>
-<span class="sourceLineNo">048</span> * Attempts to modify the progress count after calling {@code completed} will result in an {@code<a name="line.48"></a>
-<span class="sourceLineNo">049</span> * IllegalStateException}.<a name="line.49"></a>
-<span class="sourceLineNo">050</span> * &lt;p&gt;<a name="line.50"></a>
-<span class="sourceLineNo">051</span> * &lt;b&gt;Thread safety:&lt;/b&gt;<a name="line.51"></a>
-<span class="sourceLineNo">052</span> * &lt;p&gt;<a name="line.52"></a>
-<span class="sourceLineNo">053</span> * This class is not thread safe. In a concurrent environment access to this class must be synchronized externally.<a name="line.53"></a>
-<span class="sourceLineNo">054</span> * Typically only the {@link #increment()} or {@link #setProgress(long)} method are called while the operation is in<a name="line.54"></a>
-<span class="sourceLineNo">055</span> * progress. A simple synchronized block is usually sufficient to ensure thread safety in most use cases:<a name="line.55"></a>
-<span class="sourceLineNo">056</span> *<a name="line.56"></a>
-<span class="sourceLineNo">057</span> * &lt;pre&gt;&lt;code class="line-numbers match-braces language-java"&gt;<a name="line.57"></a>
-<span class="sourceLineNo">058</span> * while (...) {<a name="line.58"></a>
-<span class="sourceLineNo">059</span> *     ...<a name="line.59"></a>
-<span class="sourceLineNo">060</span> *     synchronized(this) {<a name="line.60"></a>
-<span class="sourceLineNo">061</span> *         progress.increment();<a name="line.61"></a>
-<span class="sourceLineNo">062</span> *     }<a name="line.62"></a>
-<span class="sourceLineNo">063</span> * }<a name="line.63"></a>
-<span class="sourceLineNo">064</span> * &lt;/code&gt;&lt;/pre&gt;<a name="line.64"></a>
-<span class="sourceLineNo">065</span> *<a name="line.65"></a>
-<span class="sourceLineNo">066</span> * @author Zhenya Leonov<a name="line.66"></a>
-<span class="sourceLineNo">067</span> */<a name="line.67"></a>
-<span class="sourceLineNo">068</span>public class ProgressMonitor {<a name="line.68"></a>
-<span class="sourceLineNo">069</span><a name="line.69"></a>
-<span class="sourceLineNo">070</span>    /**<a name="line.70"></a>
-<span class="sourceLineNo">071</span>     * The default minimum step size.<a name="line.71"></a>
-<span class="sourceLineNo">072</span>     */<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    public final static long DEFAULT_MIN_STEP_SIZE = 10;<a name="line.73"></a>
-<span class="sourceLineNo">074</span><a name="line.74"></a>
-<span class="sourceLineNo">075</span>    /**<a name="line.75"></a>
-<span class="sourceLineNo">076</span>     * The default maximum step size.<a name="line.76"></a>
-<span class="sourceLineNo">077</span>     */<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    public final static long DEFAULT_MAX_STEP_SIZE = 1000;<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>    private final long minStepSize;<a name="line.80"></a>
-<span class="sourceLineNo">081</span>    private final long maxStepSize;<a name="line.81"></a>
-<span class="sourceLineNo">082</span><a name="line.82"></a>
-<span class="sourceLineNo">083</span>    private final List&lt;ProgressListener&gt; listeners = new LinkedList&lt;&gt;();<a name="line.83"></a>
-<span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>    private long           progress = 0;<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    private long           step     = 0;<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    private Optional&lt;Long&gt; maximum  = Optional.empty();<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    private boolean        done     = false;<a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>    private ProgressMonitor(final long minStepSize, final long maxStepSize) {<a name="line.90"></a>
-<span class="sourceLineNo">091</span>        if (minStepSize &lt;= 0)<a name="line.91"></a>
-<span class="sourceLineNo">092</span>            throw new IllegalArgumentException("minStepSize &lt;= 0");<a name="line.92"></a>
-<span class="sourceLineNo">093</span>        if (maxStepSize &lt;= 0)<a name="line.93"></a>
-<span class="sourceLineNo">094</span>            throw new IllegalArgumentException("maxStepSize &lt;= 0");<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        if (maxStepSize &lt; minStepSize)<a name="line.95"></a>
-<span class="sourceLineNo">096</span>            throw new IllegalArgumentException("maxStepSize &lt; minStepSize");<a name="line.96"></a>
-<span class="sourceLineNo">097</span><a name="line.97"></a>
-<span class="sourceLineNo">098</span>        this.minStepSize = minStepSize;<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        this.maxStepSize = maxStepSize;<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        this.step        = minStepSize;<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    }<a name="line.101"></a>
-<span class="sourceLineNo">102</span><a name="line.102"></a>
-<span class="sourceLineNo">103</span>    /**<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     * Returns a new {@code ProgressMonitor} with the specified minimum and maximum step size.<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * <a name="line.105"></a>
-<span class="sourceLineNo">106</span>     * @param minStepSize the minimum step size<a name="line.106"></a>
-<span class="sourceLineNo">107</span>     * @param maxStepSize the maximum step size<a name="line.107"></a>
+<span class="sourceLineNo">032</span> * note that the progress count cannot surpass the maximum value. If the initial value proves to be underestimated, it<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * should be adjusted to prevent an {@link IllegalArgumentException} when the progress count surpasses it.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;p&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * &lt;b&gt;{@code ProgressEvent}s and step size:&lt;/b&gt;<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * &lt;p&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * {@link ProgressEvent}s are {@link ProgressListener#progressChanged(ProgressEvent) published} commensurate with the<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * step size specified at creation. Duplicate events will never be published. Unless the step size is<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * {@link #withConstantStepSize(long) constant}, it will progressively increase from the minimum to the maximum<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * specified size. Note that setting or adjusting the maximum value may recalculate the step size.<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * &lt;p&gt;<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;b&gt;Progress completion:&lt;/b&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;p&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * In typical scenarios {@link #completed()} should be called when the operation has concluded. In cases where the<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * operation might raise an exception, it may be appropriate to call {@code completed} within the finally clause of a<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * try statement. Calling {@code completed} multiple times is explicitly permitted and will have no subsequent effect.<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * Attempts to modify the progress count after calling {@code completed} will result in an {@code<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * IllegalStateException} until it is {@link #reset() reset}.<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * &lt;p&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;b&gt;Thread safety:&lt;/b&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * &lt;p&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * This class is not thread safe. In a concurrent environment access to this class must be synchronized externally.<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * Typically only the {@link #increment()} or {@link #setProgress(long)} method are called while the operation is in<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * progress. A simple synchronized block is usually sufficient to ensure thread safety for most use cases:<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * &lt;pre&gt;&lt;code class="line-numbers match-braces language-java"&gt;<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *     ...<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *     synchronized(...) {<a name="line.58"></a>
+<span class="sourceLineNo">059</span> *         progress.increment();<a name="line.59"></a>
+<span class="sourceLineNo">060</span> *     }<a name="line.60"></a>
+<span class="sourceLineNo">061</span> *     ...<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * &lt;/code&gt;&lt;/pre&gt;<a name="line.62"></a>
+<span class="sourceLineNo">063</span> *<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * @author Zhenya Leonov<a name="line.64"></a>
+<span class="sourceLineNo">065</span> */<a name="line.65"></a>
+<span class="sourceLineNo">066</span>public class ProgressMonitor {<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * The default minimum step size.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    public final static long DEFAULT_MIN_STEP_SIZE = 10;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>    /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * The default maximum step size.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    public final static long DEFAULT_MAX_STEP_SIZE = 1000;<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    private final long minStepSize;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    private final long maxStepSize;<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>    private long           progress = 0;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    private long           step     = 0;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    private Optional&lt;Long&gt; maximum  = Optional.empty();<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    private boolean        done     = false;<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>    private final List&lt;ProgressListener&gt; listeners = new LinkedList&lt;&gt;();<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    private ProgressMonitor(final long minStepSize, final long maxStepSize) {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        if (minStepSize &lt;= 0)<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            throw new IllegalArgumentException("minStepSize &lt;= 0");<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        if (maxStepSize &lt;= 0)<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            throw new IllegalArgumentException("maxStepSize &lt;= 0");<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        if (maxStepSize &lt; minStepSize)<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            throw new IllegalArgumentException("maxStepSize &lt; minStepSize");<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>        this.minStepSize = minStepSize;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        this.maxStepSize = maxStepSize;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        this.step        = minStepSize;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    /**<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * Returns a new {@code ProgressMonitor} with the specified minimum and maximum step size.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * <a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @param minStepSize the minimum step size<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * @param maxStepSize the maximum step size<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * @throws IllegalArgumentException if {@code minStepSize} &lt;= 0, {@code maxStepSize} &lt;= 0, or {@code maxStepSize} &lt;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     *                                  {@code minMaxSize}<a name="line.107"></a>
 <span class="sourceLineNo">108</span>     * @return a new {@code ProgressMonitor} with the specified minimum and maximum step size<a name="line.108"></a>
 <span class="sourceLineNo">109</span>     */<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    public static ProgressMonitor withMinMaxSize(final long minStepSize, final long maxStepSize) {<a name="line.110"></a>
+<span class="sourceLineNo">110</span>    public static ProgressMonitor withMinMaxStepSize(final long minStepSize, final long maxStepSize) {<a name="line.110"></a>
 <span class="sourceLineNo">111</span>        return new ProgressMonitor(minStepSize, maxStepSize);<a name="line.111"></a>
 <span class="sourceLineNo">112</span>    }<a name="line.112"></a>
 <span class="sourceLineNo">113</span><a name="line.113"></a>
@@ -247,56 +247,74 @@
 <span class="sourceLineNo">239</span>     * the final {@link ProgressEvent} if necessary. Logically this signifies the end of the operation.<a name="line.239"></a>
 <span class="sourceLineNo">240</span>     * &lt;p&gt;<a name="line.240"></a>
 <span class="sourceLineNo">241</span>     * Calling this method multiple times is always permitted and will have no subsequent effect. Any further attempts to<a name="line.241"></a>
-<span class="sourceLineNo">242</span>     * modify the state of this {@code ProgressMonitor} will result in an {@code IllegalStateException}.<a name="line.242"></a>
-<span class="sourceLineNo">243</span>     */<a name="line.243"></a>
-<span class="sourceLineNo">244</span>    public void completed() {<a name="line.244"></a>
-<span class="sourceLineNo">245</span>        if (done)<a name="line.245"></a>
-<span class="sourceLineNo">246</span>            return;<a name="line.246"></a>
-<span class="sourceLineNo">247</span><a name="line.247"></a>
-<span class="sourceLineNo">248</span>        done = true;<a name="line.248"></a>
-<span class="sourceLineNo">249</span><a name="line.249"></a>
-<span class="sourceLineNo">250</span>        if (progress == 0 || progress % step != 0)<a name="line.250"></a>
-<span class="sourceLineNo">251</span>            publish();<a name="line.251"></a>
-<span class="sourceLineNo">252</span>    }<a name="line.252"></a>
-<span class="sourceLineNo">253</span><a name="line.253"></a>
-<span class="sourceLineNo">254</span>    /**<a name="line.254"></a>
-<span class="sourceLineNo">255</span>     * Returns whether or not this {@code ProgressMonitor} has {@link #completed() completed}.<a name="line.255"></a>
-<span class="sourceLineNo">256</span>     * <a name="line.256"></a>
-<span class="sourceLineNo">257</span>     * @return whether or not this {@code ProgressMonitor} has {@link #completed() completed}<a name="line.257"></a>
-<span class="sourceLineNo">258</span>     */<a name="line.258"></a>
-<span class="sourceLineNo">259</span>    public boolean isDone() {<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        return done;<a name="line.260"></a>
-<span class="sourceLineNo">261</span>    }<a name="line.261"></a>
-<span class="sourceLineNo">262</span><a name="line.262"></a>
-<span class="sourceLineNo">263</span>    private void publish() {<a name="line.263"></a>
-<span class="sourceLineNo">264</span>        final ProgressEvent event = new Event(progress, maximum);<a name="line.264"></a>
-<span class="sourceLineNo">265</span><a name="line.265"></a>
-<span class="sourceLineNo">266</span>        for (final ProgressListener listener : listeners)<a name="line.266"></a>
-<span class="sourceLineNo">267</span>            listener.progressChanged(event);<a name="line.267"></a>
-<span class="sourceLineNo">268</span>    }<a name="line.268"></a>
-<span class="sourceLineNo">269</span><a name="line.269"></a>
-<span class="sourceLineNo">270</span>    private static class Event implements ProgressEvent {<a name="line.270"></a>
-<span class="sourceLineNo">271</span>        private final long           progress;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>        private final Optional&lt;Long&gt; maximum;<a name="line.272"></a>
-<span class="sourceLineNo">273</span><a name="line.273"></a>
-<span class="sourceLineNo">274</span>        Event(final long progress, final Optional&lt;Long&gt; maximum) {<a name="line.274"></a>
-<span class="sourceLineNo">275</span>            this.progress = progress;<a name="line.275"></a>
-<span class="sourceLineNo">276</span>            this.maximum  = maximum;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
-<span class="sourceLineNo">278</span><a name="line.278"></a>
-<span class="sourceLineNo">279</span>        @Override<a name="line.279"></a>
-<span class="sourceLineNo">280</span>        public long getProgress() {<a name="line.280"></a>
-<span class="sourceLineNo">281</span>            return progress;<a name="line.281"></a>
-<span class="sourceLineNo">282</span>        }<a name="line.282"></a>
-<span class="sourceLineNo">283</span><a name="line.283"></a>
-<span class="sourceLineNo">284</span>        @Override<a name="line.284"></a>
-<span class="sourceLineNo">285</span>        public Optional&lt;Long&gt; getMaximum() {<a name="line.285"></a>
-<span class="sourceLineNo">286</span>            return maximum;<a name="line.286"></a>
-<span class="sourceLineNo">287</span>        }<a name="line.287"></a>
+<span class="sourceLineNo">242</span>     * modify the state of this {@code ProgressMonitor} will result in an {@code IllegalStateException} until it is<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * {@link #reset() reset}.<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     */<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    public void completed() {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        if (done)<a name="line.246"></a>
+<span class="sourceLineNo">247</span>            return;<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>        done = true;<a name="line.249"></a>
+<span class="sourceLineNo">250</span><a name="line.250"></a>
+<span class="sourceLineNo">251</span>        if (progress == 0 || progress % step != 0)<a name="line.251"></a>
+<span class="sourceLineNo">252</span>            publish();<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    }<a name="line.253"></a>
+<span class="sourceLineNo">254</span><a name="line.254"></a>
+<span class="sourceLineNo">255</span>    /**<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     * Returns whether or not this {@code ProgressMonitor} has {@link #completed() completed}.<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     * <a name="line.257"></a>
+<span class="sourceLineNo">258</span>     * @return whether or not this {@code ProgressMonitor} has {@link #completed() completed}<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     */<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    public boolean isDone() {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return done;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    /**<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * Resets this {@code ProgressMonitor} its initial state, retaining all added {@link ProgressListener}s and the<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * {@link #getMaximum() maximum} value. After this call returns {@link #isDone()} will return {@code false} and<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * {@link #getProgress()} will return {@code 0}.<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     * <a name="line.268"></a>
+<span class="sourceLineNo">269</span>     * @return this {@code ProgressMonitor} instance<a name="line.269"></a>
+<span class="sourceLineNo">270</span>     */<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    public ProgressMonitor reset() {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        progress  = 0;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        this.step = minStepSize;<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        done      = false;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        return this;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    }<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>    long getCurrentStepSize() {<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        return step;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    }<a name="line.280"></a>
+<span class="sourceLineNo">281</span><a name="line.281"></a>
+<span class="sourceLineNo">282</span>    private void publish() {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        final ProgressEvent event = new Event(progress, maximum);<a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>        for (final ProgressListener listener : listeners)<a name="line.285"></a>
+<span class="sourceLineNo">286</span>            listener.progressChanged(event);<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    }<a name="line.287"></a>
 <span class="sourceLineNo">288</span><a name="line.288"></a>
-<span class="sourceLineNo">289</span>    }<a name="line.289"></a>
-<span class="sourceLineNo">290</span><a name="line.290"></a>
-<span class="sourceLineNo">291</span>}<a name="line.291"></a>
+<span class="sourceLineNo">289</span>    private static class Event implements ProgressEvent {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        private final long           progress;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        private final Optional&lt;Long&gt; maximum;<a name="line.291"></a>
+<span class="sourceLineNo">292</span><a name="line.292"></a>
+<span class="sourceLineNo">293</span>        Event(final long progress, final Optional&lt;Long&gt; maximum) {<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            this.progress = progress;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>            this.maximum  = maximum;<a name="line.295"></a>
+<span class="sourceLineNo">296</span>        }<a name="line.296"></a>
+<span class="sourceLineNo">297</span><a name="line.297"></a>
+<span class="sourceLineNo">298</span>        @Override<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        public long getProgress() {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            return progress;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        }<a name="line.301"></a>
+<span class="sourceLineNo">302</span><a name="line.302"></a>
+<span class="sourceLineNo">303</span>        @Override<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        public Optional&lt;Long&gt; getMaximum() {<a name="line.304"></a>
+<span class="sourceLineNo">305</span>            return maximum;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        }<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    }<a name="line.307"></a>
+<span class="sourceLineNo">308</span><a name="line.308"></a>
+<span class="sourceLineNo">309</span>}<a name="line.309"></a>
 
 
 
