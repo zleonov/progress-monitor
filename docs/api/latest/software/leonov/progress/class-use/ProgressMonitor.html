@@ -93,17 +93,19 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#create--">create</a></span>()</code>
-<div class="block">Returns a new <code>ProgressMonitor</code> with the minimum and maximum step size set to <a href="../../../../software/leonov/progress/ProgressMonitor.html#DEFAULT_MIN_STEP_SIZE"><code>DEFAULT_MIN_STEP_SIZE</code></a>
- and <a href="../../../../software/leonov/progress/ProgressMonitor.html#DEFAULT_MAX_STEP_SIZE"><code>DEFAULT_MAX_STEP_SIZE</code></a> respectively.</div>
+<td class="colFirst"><code><a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#reset--">reset</a></span>()</code>
+<div class="block">Resets this <code>ProgressMonitor</code> to its initial state, retaining all previously
+ <a href="../../../../software/leonov/progress/ProgressMonitor.html#addProgressListener-software.leonov.progress.ProgressListener-"><code>added</code></a> <a href="../../../../software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress"><code>ProgressListener</code></a>s and the <a href="../../../../software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a>
+ value.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#reset--">reset</a></span>()</code>
-<div class="block">Resets this <code>ProgressMonitor</code> its initial state, retaining all added <a href="../../../../software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress"><code>ProgressListener</code></a>s and the
- <a href="../../../../software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
+<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#setDynamicStepSize-long-long-">setDynamicStepSize</a></span>(long&nbsp;minStepSize,
+                  long&nbsp;maxStepSize)</code>
+<div class="block">Sets the range for the step size, which dynamically adjusts as the progress count is updated using
+ <a href="../../../../software/leonov/progress/ProgressMonitor.html#increment--"><code>increment()</code></a> and <a href="../../../../software/leonov/progress/ProgressMonitor.html#setProgress-long-"><code>setProgress(long)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -115,21 +117,14 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
 <td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#setProgress-long-">setProgress</a></span>(long&nbsp;count)</code>
-<div class="block">Sets the progress count, <a href="../../../../software/leonov/progress/ProgressListener.html#progressChanged-software.leonov.progress.ProgressEvent-"><code>publishing</code></a> a <a href="../../../../software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><code>ProgressEvent</code></a>
+<div class="block">Sets the progress count, <a href="../../../../software/leonov/progress/ProgressListener.html#onUpdate-software.leonov.progress.ProgressEvent-"><code>publishing</code></a> a <a href="../../../../software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><code>ProgressEvent</code></a>
  if necessary.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#withConstantStepSize-long-">withConstantStepSize</a></span>(long&nbsp;stepSize)</code>
-<div class="block">Returns a new <code>ProgressMonitor</code> with the specified <code>stepSize</code>.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#withMinMaxStepSize-long-long-">withMinMaxStepSize</a></span>(long&nbsp;minStepSize,
-                  long&nbsp;maxStepSize)</code>
-<div class="block">Returns a new <code>ProgressMonitor</code> with the specified minimum and maximum step size.</div>
+<td class="colFirst"><code><a href="../../../../software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></code></td>
+<td class="colLast"><span class="typeNameLabel">ProgressMonitor.</span><code><span class="memberNameLink"><a href="../../../../software/leonov/progress/ProgressMonitor.html#setStepSize-long-">setStepSize</a></span>(long&nbsp;stepSize)</code>
+<div class="block">Sets the specified constant step size.</div>
 </td>
 </tr>
 </tbody>

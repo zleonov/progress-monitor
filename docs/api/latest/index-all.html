@@ -68,7 +68,7 @@
 <!--   -->
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a name="I:A">
+<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a name="I:A">
 <!--   -->
 </a>
 <h2 class="title">A</h2>
@@ -85,13 +85,8 @@
 <dl>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#completed--">completed()</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
 <dd>
-<div class="block">Marks this <code>ProgressMonitor</code> as completed, <a href="software/leonov/progress/ProgressListener.html#progressChanged-software.leonov.progress.ProgressEvent-"><code>publishing</code></a>
+<div class="block">Marks this <code>ProgressMonitor</code> as completed, <a href="software/leonov/progress/ProgressListener.html#onUpdate-software.leonov.progress.ProgressEvent-"><code>publishing</code></a>
  the final <a href="software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><code>ProgressEvent</code></a> if necessary.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#create--">create()</a></span> - Static method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
-<dd>
-<div class="block">Returns a new <code>ProgressMonitor</code> with the minimum and maximum step size set to <a href="software/leonov/progress/ProgressMonitor.html#DEFAULT_MIN_STEP_SIZE"><code>ProgressMonitor.DEFAULT_MIN_STEP_SIZE</code></a>
- and <a href="software/leonov/progress/ProgressMonitor.html#DEFAULT_MAX_STEP_SIZE"><code>ProgressMonitor.DEFAULT_MAX_STEP_SIZE</code></a> respectively.</div>
 </dd>
 </dl>
 <a name="I:D">
@@ -137,12 +132,31 @@
 <dl>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#increment--">increment()</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
 <dd>
-<div class="block">Increments the progress count by 1, <a href="software/leonov/progress/ProgressListener.html#progressChanged-software.leonov.progress.ProgressEvent-"><code>publishing</code></a> a
+<div class="block">Increments the progress count by 1, <a href="software/leonov/progress/ProgressListener.html#onUpdate-software.leonov.progress.ProgressEvent-"><code>publishing</code></a> a
  <a href="software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><code>ProgressEvent</code></a> if necessary.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#isDone--">isDone()</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
 <dd>
-<div class="block">Returns whether or not this <code>ProgressMonitor</code> has <a href="software/leonov/progress/ProgressMonitor.html#completed--"><code>completed</code></a>.</div>
+<div class="block">Returns <code>true</code> if this <code>ProgressMonitor</code> has <a href="software/leonov/progress/ProgressMonitor.html#completed--"><code>completed</code></a>.</div>
+</dd>
+</dl>
+<a name="I:O">
+<!--   -->
+</a>
+<h2 class="title">O</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#onUpdate-software.leonov.progress.ProgressEvent-">onUpdate(ProgressEvent)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dd>
+<div class="block">Receives a progress changed event.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#onUpdate-java.lang.String-">onUpdate(String)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dd>
+<div class="block">Receives the formatted percent value as a calculation of the <a href="software/leonov/progress/ProgressMonitor.html#getProgress--"><code>progress</code></a> against
+ the <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressListener.html#onUpdate-software.leonov.progress.ProgressEvent-">onUpdate(ProgressEvent)</a></span> - Method in interface software.leonov.progress.<a href="software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress">ProgressListener</a></dt>
+<dd>
+<div class="block">Receives a progress changed event.</div>
 </dd>
 </dl>
 <a name="I:P">
@@ -150,9 +164,24 @@
 </a>
 <h2 class="title">P</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressListener.html#progressChanged-software.leonov.progress.ProgressEvent-">progressChanged(ProgressEvent)</a></span> - Method in interface software.leonov.progress.<a href="software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress">ProgressListener</a></dt>
+<dt><a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><span class="typeNameLink">Percentage</span></a> - Class in <a href="software/leonov/progress/package-summary.html">software.leonov.progress</a></dt>
 <dd>
-<div class="block">Receives a progress changed event.</div>
+<div class="block">A skeletal implementation of the <code>ProgressListener</code> interface which calculates the
+ <a href="software/leonov/progress/ProgressMonitor.html#getProgress--"><code>progress</code></a> value as a percentage of the <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#Percentage--">Percentage()</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dd>
+<div class="block">Creates a new <a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><code>Percentage</code></a> <code>ProgressListener</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#Percentage-java.text.DecimalFormat-">Percentage(DecimalFormat)</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dd>
+<div class="block">Creates a new <a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><code>Percentage</code></a> <code>ProgressListener</code> which uses the specified <code>DecimalFormat</code> to format
+ the percent value.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#Percentage-java.util.Locale-java.lang.String-">Percentage(Locale, String)</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dd>
+<div class="block">Creates a new <a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><code>Percentage</code></a> <code>ProgressListener</code> which uses the specified <code>Locale</code> and <code>pattern</code>
+ to format the percent value.</div>
 </dd>
 <dt><a href="software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><span class="typeNameLink">ProgressEvent</span></a> - Interface in <a href="software/leonov/progress/package-summary.html">software.leonov.progress</a></dt>
 <dd>
@@ -166,6 +195,11 @@
 <dd>
 <div class="block">A <code>ProgressMonitor</code> can be used to track the progress of a long running operation.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#ProgressMonitor--">ProgressMonitor()</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
+<dd>
+<div class="block">Creates a new <code>ProgressMonitor</code> with the minimum and maximum step size set to <a href="software/leonov/progress/ProgressMonitor.html#DEFAULT_MIN_STEP_SIZE"><code>ProgressMonitor.DEFAULT_MIN_STEP_SIZE</code></a>
+ and <a href="software/leonov/progress/ProgressMonitor.html#DEFAULT_MAX_STEP_SIZE"><code>ProgressMonitor.DEFAULT_MAX_STEP_SIZE</code></a> respectively.</div>
+</dd>
 </dl>
 <a name="I:R">
 <!--   -->
@@ -174,8 +208,9 @@
 <dl>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#reset--">reset()</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
 <dd>
-<div class="block">Resets this <code>ProgressMonitor</code> its initial state, retaining all added <a href="software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress"><code>ProgressListener</code></a>s and the
- <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
+<div class="block">Resets this <code>ProgressMonitor</code> to its initial state, retaining all previously
+ <a href="software/leonov/progress/ProgressMonitor.html#addProgressListener-software.leonov.progress.ProgressListener-"><code>added</code></a> <a href="software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress"><code>ProgressListener</code></a>s and the <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a>
+ value.</div>
 </dd>
 </dl>
 <a name="I:S">
@@ -183,35 +218,30 @@
 </a>
 <h2 class="title">S</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#setDynamicStepSize-long-long-">setDynamicStepSize(long, long)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
+<dd>
+<div class="block">Sets the range for the step size, which dynamically adjusts as the progress count is updated using
+ <a href="software/leonov/progress/ProgressMonitor.html#increment--"><code>ProgressMonitor.increment()</code></a> and <a href="software/leonov/progress/ProgressMonitor.html#setProgress-long-"><code>ProgressMonitor.setProgress(long)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#setMaximum-long-">setMaximum(long)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
 <dd>
 <div class="block">Sets the maximum value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#setProgress-long-">setProgress(long)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
 <dd>
-<div class="block">Sets the progress count, <a href="software/leonov/progress/ProgressListener.html#progressChanged-software.leonov.progress.ProgressEvent-"><code>publishing</code></a> a <a href="software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><code>ProgressEvent</code></a>
+<div class="block">Sets the progress count, <a href="software/leonov/progress/ProgressListener.html#onUpdate-software.leonov.progress.ProgressEvent-"><code>publishing</code></a> a <a href="software/leonov/progress/ProgressEvent.html" title="interface in software.leonov.progress"><code>ProgressEvent</code></a>
  if necessary.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#setStepSize-long-">setStepSize(long)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
+<dd>
+<div class="block">Sets the specified constant step size.</div>
 </dd>
 <dt><a href="software/leonov/progress/package-summary.html">software.leonov.progress</a> - package software.leonov.progress</dt>
 <dd>
 <div class="block">Core classes and interfaces.</div>
 </dd>
 </dl>
-<a name="I:W">
-<!--   -->
-</a>
-<h2 class="title">W</h2>
-<dl>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#withConstantStepSize-long-">withConstantStepSize(long)</a></span> - Static method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
-<dd>
-<div class="block">Returns a new <code>ProgressMonitor</code> with the specified <code>stepSize</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressMonitor.html#withMinMaxStepSize-long-long-">withMinMaxStepSize(long, long)</a></span> - Static method in class software.leonov.progress.<a href="software/leonov/progress/ProgressMonitor.html" title="class in software.leonov.progress">ProgressMonitor</a></dt>
-<dd>
-<div class="block">Returns a new <code>ProgressMonitor</code> with the specified minimum and maximum step size.</div>
-</dd>
-</dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:W">W</a>&nbsp;</div>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
 <!--   -->
