@@ -4,7 +4,7 @@ A utility to track the progress of long running operations in Java.
 
 Overview
 --------
-Monitoring the progress of long running operations can become unexpectedly cumbersome. Even if all you want to do is print a status update to standard out.
+Tracking the progress of long running operations can become unexpectedly cumbersome. Even if all you want to do is print a status update to standard out.
 
 How frequently should updates be printed? What if there's no change in progress? Or if the task has already finished? With _Progress Monitor_ you can take all the guess work out of the equation and write code like this:
 
