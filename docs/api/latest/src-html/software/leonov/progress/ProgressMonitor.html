@@ -34,7 +34,7 @@
 <span class="sourceLineNo">026</span> * &lt;p&gt;<a name="line.26"></a>
 <span class="sourceLineNo">027</span> * When this class is instantiated, the minimum and maximum step size will be set to the {@link #DEFAULT_MIN_STEP_SIZE}<a name="line.27"></a>
 <span class="sourceLineNo">028</span> * and {@link #DEFAULT_MAX_STEP_SIZE} respectively. As the progress count is {@link #increment() updated},<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * {@link ProgressEvent}s are {@link ProgressListener#onUpdate(ProgressEvent) published} commensurate with the<a name="line.29"></a>
+<span class="sourceLineNo">029</span> * {@link ProgressEvent}s are {@link ProgressListener#progressChanged(ProgressEvent) published} commensurate with the<a name="line.29"></a>
 <span class="sourceLineNo">030</span> * step size, which will gradually increases from the specified minimum to the maximum size. No duplicate events will be<a name="line.30"></a>
 <span class="sourceLineNo">031</span> * published.<a name="line.31"></a>
 <span class="sourceLineNo">032</span> * &lt;p&gt;<a name="line.32"></a>
@@ -183,7 +183,7 @@
 <span class="sourceLineNo">175</span>    }<a name="line.175"></a>
 <span class="sourceLineNo">176</span><a name="line.176"></a>
 <span class="sourceLineNo">177</span>    /**<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * Increments the progress count by 1, {@link ProgressListener#onUpdate(ProgressEvent) publishing} a<a name="line.178"></a>
+<span class="sourceLineNo">178</span>     * Increments the progress count by 1, {@link ProgressListener#progressChanged(ProgressEvent) publishing} a<a name="line.178"></a>
 <span class="sourceLineNo">179</span>     * {@link ProgressEvent} if necessary.<a name="line.179"></a>
 <span class="sourceLineNo">180</span>     * <a name="line.180"></a>
 <span class="sourceLineNo">181</span>     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #completed() completed}<a name="line.181"></a>
@@ -196,7 +196,7 @@
 <span class="sourceLineNo">188</span>    }<a name="line.188"></a>
 <span class="sourceLineNo">189</span><a name="line.189"></a>
 <span class="sourceLineNo">190</span>    /**<a name="line.190"></a>
-<span class="sourceLineNo">191</span>     * Sets the progress count, {@link ProgressListener#onUpdate(ProgressEvent) publishing} a {@link ProgressEvent}<a name="line.191"></a>
+<span class="sourceLineNo">191</span>     * Sets the progress count, {@link ProgressListener#progressChanged(ProgressEvent) publishing} a {@link ProgressEvent}<a name="line.191"></a>
 <span class="sourceLineNo">192</span>     * if necessary.<a name="line.192"></a>
 <span class="sourceLineNo">193</span>     * <a name="line.193"></a>
 <span class="sourceLineNo">194</span>     * @param count the new progress count<a name="line.194"></a>
@@ -245,7 +245,7 @@
 <span class="sourceLineNo">237</span>    }<a name="line.237"></a>
 <span class="sourceLineNo">238</span><a name="line.238"></a>
 <span class="sourceLineNo">239</span>    /**<a name="line.239"></a>
-<span class="sourceLineNo">240</span>     * Marks this {@code ProgressMonitor} as completed, {@link ProgressListener#onUpdate(ProgressEvent) publishing}<a name="line.240"></a>
+<span class="sourceLineNo">240</span>     * Marks this {@code ProgressMonitor} as completed, {@link ProgressListener#progressChanged(ProgressEvent) publishing}<a name="line.240"></a>
 <span class="sourceLineNo">241</span>     * the final {@link ProgressEvent} if necessary. Logically this signifies the end of the operation.<a name="line.241"></a>
 <span class="sourceLineNo">242</span>     * &lt;p&gt;<a name="line.242"></a>
 <span class="sourceLineNo">243</span>     * Calling this method multiple times is always permitted and will have no subsequent effect. Any further attempts to<a name="line.243"></a>
@@ -294,7 +294,7 @@
 <span class="sourceLineNo">286</span>        final ProgressEvent event = new Event(count, maximum);<a name="line.286"></a>
 <span class="sourceLineNo">287</span><a name="line.287"></a>
 <span class="sourceLineNo">288</span>        for (final ProgressListener listener : listeners)<a name="line.288"></a>
-<span class="sourceLineNo">289</span>            listener.onUpdate(event);<a name="line.289"></a>
+<span class="sourceLineNo">289</span>            listener.progressChanged(event);<a name="line.289"></a>
 <span class="sourceLineNo">290</span>    }<a name="line.290"></a>
 <span class="sourceLineNo">291</span><a name="line.291"></a>
 <span class="sourceLineNo">292</span>    private static class Event implements ProgressEvent {<a name="line.292"></a>

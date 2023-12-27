@@ -85,12 +85,12 @@
 <span class="sourceLineNo">077</span>     * {@link ProgressMonitor#getMaximum() maximum} value and invokes {@link #onUpdate(String)}.<a name="line.77"></a>
 <span class="sourceLineNo">078</span>     */<a name="line.78"></a>
 <span class="sourceLineNo">079</span>    @Override<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    public final void onUpdate(final ProgressEvent event) {<a name="line.80"></a>
+<span class="sourceLineNo">080</span>    public final void progressChanged(final ProgressEvent event) {<a name="line.80"></a>
 <span class="sourceLineNo">081</span>        final double percentage = (double) event.getProgress() / event.getMaximum().orElseThrow(() -&gt; new IllegalStateException("maximum value undefined")) * 100;<a name="line.81"></a>
 <span class="sourceLineNo">082</span>        final String pct        = format.format(percentage);<a name="line.82"></a>
 <span class="sourceLineNo">083</span><a name="line.83"></a>
 <span class="sourceLineNo">084</span>        try {<a name="line.84"></a>
-<span class="sourceLineNo">085</span>            if (!pct.equals(last) &amp;&amp; format.parse(pct).doubleValue() != 0.0) {<a name="line.85"></a>
+<span class="sourceLineNo">085</span>            if (!pct.equals(last) &amp;&amp; format.parse(pct).doubleValue() != 0) {<a name="line.85"></a>
 <span class="sourceLineNo">086</span>                last = pct;<a name="line.86"></a>
 <span class="sourceLineNo">087</span>                onUpdate(pct);<a name="line.87"></a>
 <span class="sourceLineNo">088</span>            }<a name="line.88"></a>
