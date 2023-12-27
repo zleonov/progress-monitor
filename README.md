@@ -4,12 +4,15 @@ A utility to track the progress of long running operations in Java.
 
 Overview
 --------
-Attempting to track the progress of long running operations can become unexpectedly cumbersome. Even if all you want to do is print a status update to standard out.
+Attempting to track the progress of long running operations can be unexpectedly cumbersome. Even if all you want to do is print a status update to standard out.
 
 How frequently should updates be printed? What if there's no change in progress? What if the task has already completed? With _Progress Monitor_ you can take all the guess work out of the equation and write code like this:
 
 ```Java
- final ProgressMonitor progress = ProgressMonitor.create().setDynamicStepSize(10, 1000).setMaximum(10000).addProgressListener(event -> ...);
+ final ProgressMonitor progress = ProgressMonitor.create()
+                                                 .setDynamicStepSize(10, 1000)
+                                                 .setMaximum(10000)
+                                                 .addProgressListener(event -> ...);
  
  while (...) {
      ...
