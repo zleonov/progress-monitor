@@ -9,10 +9,6 @@ import java.util.Optional;
 /**
  * A {@code ProgressMonitor} can be used to track the progress of a long running operation.
  * <p>
- * This class can be instantiated by calling the {@link #create()}, {@link #withConstantStepSize(long)}, or
- * {@link #withMinMaxStepSize(long, long)} methods, followed by {@link #addProgressListener(ProgressListener) adding}
- * one or more {@link ProgressListener}s.
- * <p>
  * <b>Basic usage:</b>
  *
  * <pre><code class="line-numbers match-braces language-java">
@@ -26,18 +22,22 @@ import java.util.Optional;
  * progress.completed();
  * </code></pre>
  * <p>
+ * <b>Step size and {@code ProgressEvent}s:</b>
+ * <p>
+ * When this class is instantiated, the minimum and maximum step size will be set to the {@link #DEFAULT_MIN_STEP_SIZE}
+ * and {@link #DEFAULT_MAX_STEP_SIZE} respectively. As the progress count is {@link #increment() updated},
+ * {@link ProgressEvent}s are {@link ProgressListener#progressChanged(ProgressEvent) published} commensurate with the
+ * step size, which will gradually increases from the specified minimum to the maximum size. No duplicate events will be
+ * published.
+ * <p>
+ * The step size can be set to a constant value by calling {@link #setStepSize(long)}. A different maximum and minimum
+ * range can be defined by calling {@link #setDynamicStepSize(long, long)}.
+ * <p>
  * <b>Maximum value:</b>
  * <p>
  * Specifying the {@link #setMaximum(long) maximum} value is not mandatory. However, if specified, it's important to
  * note that the progress count cannot surpass the maximum value. If the initial value proves to be underestimated, it
  * should be adjusted to prevent an {@link IllegalArgumentException} when the progress count surpasses it.
- * <p>
- * <b>{@code ProgressEvent}s and step size:</b>
- * <p>
- * {@link ProgressEvent}s are {@link ProgressListener#progressChanged(ProgressEvent) published} commensurate with the
- * step size specified at creation. Duplicate events will never be published. Unless the step size is
- * {@link #withConstantStepSize(long) constant}, it will progressively increase from the minimum to the maximum
- * specified size. Note that setting or adjusting the maximum value may recalculate the step size.
  * <p>
  * <b>Progress completion:</b>
  * <p>
@@ -63,7 +63,7 @@ import java.util.Optional;
  *
  * @author Zhenya Leonov
  */
-public class ProgressMonitor {
+public final class ProgressMonitor {
 
     /**
      * The default minimum step size.
@@ -75,8 +75,8 @@ public class ProgressMonitor {
      */
     public final static long DEFAULT_MAX_STEP_SIZE = 1000;
 
-    private final long minStepSize;
-    private final long maxStepSize;
+    private long minStepSize;
+    private long maxStepSize;
 
     private long           progress = 0;
     private long           step     = 0;
@@ -85,51 +85,14 @@ public class ProgressMonitor {
 
     private final List<ProgressListener> listeners = new LinkedList<>();
 
-    private ProgressMonitor(final long minStepSize, final long maxStepSize) {
-        if (minStepSize <= 0)
-            throw new IllegalArgumentException("minStepSize <= 0");
-        if (maxStepSize <= 0)
-            throw new IllegalArgumentException("maxStepSize <= 0");
-        if (maxStepSize < minStepSize)
-            throw new IllegalArgumentException("maxStepSize < minStepSize");
-
-        this.minStepSize = minStepSize;
-        this.maxStepSize = maxStepSize;
-        this.step        = minStepSize;
-    }
-
     /**
-     * Returns a new {@code ProgressMonitor} with the specified minimum and maximum step size.
-     * 
-     * @param minStepSize the minimum step size
-     * @param maxStepSize the maximum step size
-     * @throws IllegalArgumentException if {@code minStepSize} <= 0, {@code maxStepSize} <= 0, or {@code maxStepSize} <
-     *                                  {@code minMaxSize}
-     * @return a new {@code ProgressMonitor} with the specified minimum and maximum step size
-     */
-    public static ProgressMonitor withMinMaxStepSize(final long minStepSize, final long maxStepSize) {
-        return new ProgressMonitor(minStepSize, maxStepSize);
-    }
-
-    /**
-     * Returns a new {@code ProgressMonitor} with the specified {@code stepSize}.
-     * 
-     * @param stepSize the specified step size
-     * @return a new {@code ProgressMonitor} with the specified {@code stepSize}
-     */
-    public static ProgressMonitor withConstantStepSize(final long stepSize) {
-        return new ProgressMonitor(stepSize, stepSize);
-    }
-
-    /**
-     * Returns a new {@code ProgressMonitor} with the minimum and maximum step size set to {@link #DEFAULT_MIN_STEP_SIZE}
+     * Creates a new {@code ProgressMonitor} with the minimum and maximum step size set to {@link #DEFAULT_MIN_STEP_SIZE}
      * and {@link #DEFAULT_MAX_STEP_SIZE} respectively.
-     * 
-     * @return a new {@code ProgressMonitor} with the minimum and maximum step size set to {@link #DEFAULT_MIN_STEP_SIZE}
-     *         and {@link #DEFAULT_MAX_STEP_SIZE} respectively
      */
-    public static ProgressMonitor create() {
-        return new ProgressMonitor(DEFAULT_MIN_STEP_SIZE, DEFAULT_MAX_STEP_SIZE);
+    public ProgressMonitor() {
+        this.minStepSize = DEFAULT_MIN_STEP_SIZE;
+        this.maxStepSize = DEFAULT_MAX_STEP_SIZE;
+        this.step        = minStepSize;
     }
 
     /**
@@ -141,6 +104,42 @@ public class ProgressMonitor {
     public ProgressMonitor addProgressListener(final ProgressListener listener) {
         requireNonNull(listener, "listener == null");
         listeners.add(listener);
+        return this;
+    }
+
+    /**
+     * Sets the specified constant step size.
+     * 
+     * @param stepSize the specified step size
+     * @return this {@code ProgressMonitor} instance
+     */
+    public ProgressMonitor setStepSize(final long stepSize) {
+        return setDynamicStepSize(stepSize, stepSize);
+    }
+
+    /**
+     * Sets the range for the step size, which dynamically adjusts as the progress count is updated using
+     * {@link #increment()} and {@link #setProgress(long)}. The step size gradually increases from the specified minimum to
+     * the maximum size.
+     * 
+     * @param minStepSize the minimum step size
+     * @param maxStepSize the maximum step size
+     * @throws IllegalArgumentException if {@code minStepSize} <= 0, {@code maxStepSize} <= 0, or {@code maxStepSize} <
+     *                                  {@code minMaxSize}
+     * @return this {@code ProgressMonitor} instance
+     */
+    public ProgressMonitor setDynamicStepSize(final long minStepSize, final long maxStepSize) {
+        if (minStepSize <= 0)
+            throw new IllegalArgumentException("minStepSize <= 0");
+        if (maxStepSize <= 0)
+            throw new IllegalArgumentException("maxStepSize <= 0");
+        if (maxStepSize < minStepSize)
+            throw new IllegalArgumentException("maxStepSize < minStepSize");
+
+        this.minStepSize = minStepSize;
+        this.maxStepSize = maxStepSize;
+        this.step        = minStepSize;
+
         return this;
     }
 
@@ -162,7 +161,6 @@ public class ProgressMonitor {
             throw new IllegalArgumentException("maximum (" + maximum + ") < progress (" + progress + ")");
 
         this.maximum = Optional.of(maximum);
-        step         = maximum > maxStepSize * 5 ? maxStepSize : (maximum / 5 <= minStepSize ? minStepSize : maximum / 5);
 
         return this;
     }
@@ -210,16 +208,20 @@ public class ProgressMonitor {
                 throw new IllegalArgumentException("count (" + count + ") > maximum (" + max + ")");
         });
 
-        if (count > progress) {
-            final long prev = this.progress;
-            this.progress = count;
+        final long maxStepSize = this.maxStepSize;
+        final long minStepSize = this.minStepSize;
+        final long step        = this.step;
 
-            if (count % step == 0 || count - prev > step) {
-                publish();
+        if (count > progress) {
+
+            if (count % step == 0 || count % step < progress % step) {
+                publish(count);
 
                 if (step < maxStepSize)
-                    step = count > maxStepSize * 5 ? maxStepSize : (count / 5 <= minStepSize ? minStepSize : count / 5);
+                    this.step = count > maxStepSize * 5 ? maxStepSize : (count / 5 <= minStepSize ? minStepSize : count / 5);
             }
+
+            progress = count;
         }
 
         return this;
@@ -249,22 +251,23 @@ public class ProgressMonitor {
         done = true;
 
         if (progress == 0 || progress % step != 0)
-            publish();
+            publish(progress);
     }
 
     /**
-     * Returns whether or not this {@code ProgressMonitor} has {@link #completed() completed}.
+     * Returns {@code true} if this {@code ProgressMonitor} has {@link #completed() completed}.
      * 
-     * @return whether or not this {@code ProgressMonitor} has {@link #completed() completed}
+     * @return {@code true} if this {@code ProgressMonitor} has {@link #completed() completed}
      */
     public boolean isDone() {
         return done;
     }
 
     /**
-     * Resets this {@code ProgressMonitor} its initial state, retaining all added {@link ProgressListener}s and the
-     * {@link #getMaximum() maximum} value. After this call returns {@link #isDone()} will return {@code false} and
-     * {@link #getProgress()} will return {@code 0}.
+     * Resets this {@code ProgressMonitor} to its initial state, retaining all previously
+     * {@link #addProgressListener(ProgressListener) added} {@link ProgressListener}s and the {@link #getMaximum() maximum}
+     * value. After this call returns the {@link #isDone()} method will return {@code false}, {@link #getProgress()} will
+     * return {@code 0}, and if the step size is dynamic, it will be reset to the minimum value.
      * 
      * @return this {@code ProgressMonitor} instance
      */
@@ -279,8 +282,8 @@ public class ProgressMonitor {
         return step;
     }
 
-    private void publish() {
-        final ProgressEvent event = new Event(progress, maximum);
+    private void publish(final long count) {
+        final ProgressEvent event = new Event(count, maximum);
 
         for (final ProgressListener listener : listeners)
             listener.progressChanged(event);
