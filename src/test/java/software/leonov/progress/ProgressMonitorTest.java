@@ -3,8 +3,6 @@ package software.leonov.progress;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static software.leonov.progress.ProgressMonitor.DEFAULT_MAX_STEP_SIZE;
-import static software.leonov.progress.ProgressMonitor.DEFAULT_MIN_STEP_SIZE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +18,8 @@ import org.junit.jupiter.api.Test;
 
 class ProgressMonitorTest {
 
-    static List<Long>      actual   = new ArrayList<>();
-    static ProgressMonitor progress = ProgressMonitor.create();
+    static List<Long>      actual = new ArrayList<>();
+    static ProgressMonitor progress;
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
@@ -34,7 +32,7 @@ class ProgressMonitorTest {
     @BeforeEach
     void setUp() throws Exception {
         actual.clear();
-        progress = ProgressMonitor.create();
+        progress = new ProgressMonitor();
     }
 
     @AfterEach
@@ -104,19 +102,19 @@ class ProgressMonitorTest {
 
     @Test
     void create_minStepSize_0() {
-        final Exception e = assertThrows(IllegalArgumentException.class, () -> ProgressMonitor.withMinMaxStepSize(0L, 1L));
+        final Exception e = assertThrows(IllegalArgumentException.class, () -> new ProgressMonitor().setDynamicStepSize(0L, 1L));
         assertThat(e.getMessage()).isEqualTo("minStepSize <= 0");
     }
 
     @Test
     void create_maxStepSize_0() {
-        final Exception e = assertThrows(IllegalArgumentException.class, () -> ProgressMonitor.withMinMaxStepSize(1L, 0L));
+        final Exception e = assertThrows(IllegalArgumentException.class, () -> new ProgressMonitor().setDynamicStepSize(1L, 0L));
         assertThat(e.getMessage()).isEqualTo("maxStepSize <= 0");
     }
 
     @Test
     void create_minStepSize_10_maxStepSize_1() {
-        final Exception e = assertThrows(IllegalArgumentException.class, () -> ProgressMonitor.withMinMaxStepSize(10L, 1L));
+        final Exception e = assertThrows(IllegalArgumentException.class, () -> new ProgressMonitor().setDynamicStepSize(10L, 1L));
         assertThat(e.getMessage()).isEqualTo("maxStepSize < minStepSize");
     }
 
@@ -171,29 +169,14 @@ class ProgressMonitorTest {
     }
 
     @Test
-    void setMaximum_5x_DEFAULT_MAX_STEP_SIZE_getStepSize() {
-        progress.setMaximum(DEFAULT_MAX_STEP_SIZE * 5);
-        assertThat(progress.getCurrentStepSize()).isEqualTo(DEFAULT_MAX_STEP_SIZE);
-    }
+    void setStepSize_100_setProgress_50_setStepSize_55_setProgress_75() {
+        progress.addProgressListener(event -> actual.add(event.getProgress()));
 
-    @Test
-    void setMaximum_4x_DEFAULT_MAX_STEP_SIZE_getStepSize() {
-        final long maximum = DEFAULT_MAX_STEP_SIZE * 4;
-        progress.setMaximum(maximum);
-        assertThat(progress.getCurrentStepSize()).isEqualTo(maximum / 5);
-    }
+        progress.setStepSize(100).setProgress(50).setStepSize(55).setProgress(75);
 
-    @Test
-    void setMaximum_4x_DEFAULT_MIN_STEP_SIZE_getStepSize() {
-        progress.setMaximum(DEFAULT_MIN_STEP_SIZE * 4);
-        assertThat(progress.getCurrentStepSize()).isEqualTo(DEFAULT_MIN_STEP_SIZE);
-    }
+        final List<Long> expected = Arrays.asList(75L);
 
-    @Test
-    void withConstantStepSize_setMaximum_5x_DEFAULT_MAX_STEP_SIZE_getStepSize() {
-        final ProgressMonitor progress = ProgressMonitor.withConstantStepSize(42);
-        progress.setMaximum(DEFAULT_MAX_STEP_SIZE * 5);
-        assertThat(progress.getCurrentStepSize()).isEqualTo(42);
+        assertThat(actual).isEqualTo(expected);
     }
 
 }
