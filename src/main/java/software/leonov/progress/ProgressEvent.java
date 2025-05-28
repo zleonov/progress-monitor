@@ -1,6 +1,6 @@
 package software.leonov.progress;
 
-import java.util.Optional;
+import java.util.OptionalLong;
 
 /**
  * A {@code ProgressEvent} is used to notify {@link ProgressListener}s that the progress has changed.
@@ -21,6 +21,6 @@ public interface ProgressEvent {
      * 
      * @return the maximum value
      */
-    public Optional<Long> getMaximum();
+    public OptionalLong getMaximum();
 
 }

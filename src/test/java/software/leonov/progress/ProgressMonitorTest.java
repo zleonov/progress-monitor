@@ -46,7 +46,7 @@ class ProgressMonitorTest {
         for (int i = 0; i < 10000; i++)
             progress.increment();
 
-        progress.completed();
+        progress.complete();
 
         final List<Long> expected = Arrays.asList(10L, 20L, 30L, 40L, 50L, 60L, 72L, 84L, 96L, 114L, 132L, 156L, 186L, 222L, 264L, 312L, 372L, 444L, 528L, 630L, 756L, 906L, 1086L, 1302L, 1560L, 1872L, 2244L, 2688L, 3222L, 3864L, 4632L,
                 5556L, 6000L, 7000L, 8000L, 9000L, 10000L);
@@ -60,7 +60,7 @@ class ProgressMonitorTest {
 
         LongStream.of(10, 100, 1000, 10000).forEach(progress::setProgress);
 
-        progress.completed();
+        progress.complete();
 
         final List<Long> expected = Arrays.asList(10L, 100L, 1000L, 10000L);
 
@@ -73,7 +73,7 @@ class ProgressMonitorTest {
 
         LongStream.of(10, 10, 10).forEach(progress::setProgress);
 
-        progress.completed();
+        progress.complete();
 
         final List<Long> expected = Arrays.asList(10L);
 
@@ -120,7 +120,7 @@ class ProgressMonitorTest {
 
     @Test
     void create_setProgress_completed_increment() {
-        progress.setProgress(100).completed();
+        progress.setProgress(100).complete();
 
         final Exception e = assertThrows(IllegalStateException.class, () -> progress.increment());
         assertThat(e.getMessage()).isEqualTo("operation has completed");
@@ -128,7 +128,7 @@ class ProgressMonitorTest {
 
     @Test
     void create_setProgress_completed_setProgress() {
-        progress.setProgress(100).completed();
+        progress.setProgress(100).complete();
 
         final Exception e = assertThrows(IllegalStateException.class, () -> progress.setProgress(200));
         assertThat(e.getMessage()).isEqualTo("operation has completed");

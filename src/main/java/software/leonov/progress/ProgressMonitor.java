@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.OptionalLong;
 
 /**
  * A {@code ProgressMonitor} can be used to track the progress of a long running operation.
@@ -12,7 +12,7 @@ import java.util.Optional;
  * <b>Basic usage:</b>
  *
  * <pre><code class="line-numbers match-braces language-java">
- * final ProgressMonitor progress = ProgressMonitor.create().addProgressListener(event -> ...);
+ * final ProgressMonitor progress = new ProgressMonitor().addProgressListener(event -> ...);
  *
  * while (...) {
  *     ...
@@ -41,7 +41,7 @@ import java.util.Optional;
  * <p>
  * <b>Progress completion:</b>
  * <p>
- * In typical scenarios {@link #completed()} should be called when the operation has concluded. In cases where the
+ * In typical scenarios {@link #complete()} should be called when the operation has concluded. In cases where the
  * operation might raise an exception, it may be appropriate to call {@code completed} within the finally clause of a
  * try statement. Calling {@code completed} multiple times is explicitly permitted and will have no subsequent effect.
  * Attempts to modify the progress count after calling {@code completed} will result in an {@code
@@ -78,10 +78,10 @@ public final class ProgressMonitor {
     private long minStepSize;
     private long maxStepSize;
 
-    private long           progress = 0;
-    private long           step     = 0;
-    private Optional<Long> maximum  = Optional.empty();
-    private boolean        done     = false;
+    private long         progress = 0;
+    private long         step     = 0;
+    private OptionalLong maximum  = OptionalLong.empty();
+    private boolean      done     = false;
 
     private final List<ProgressListener> listeners = new LinkedList<>();
 
@@ -145,10 +145,10 @@ public final class ProgressMonitor {
 
     /**
      * Sets the maximum value. This method may be called more than once to reset the maximum value if this
-     * {@code ProgressMonitor} has not {@link #completed() completed}.
+     * {@code ProgressMonitor} has not {@link #complete() completed}.
      * 
      * @param maximum the maximum value
-     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #completed() completed}
+     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #complete() completed}
      * @throws IllegalArgumentException if {@code maximum} < 1 or {@code maximum} < {@link #getProgress() progress}
      * @return this {@code ProgressMonitor} instance
      */
@@ -160,7 +160,7 @@ public final class ProgressMonitor {
         if (maximum < progress)
             throw new IllegalArgumentException("maximum (" + maximum + ") < progress (" + progress + ")");
 
-        this.maximum = Optional.of(maximum);
+        this.maximum = OptionalLong.of(maximum);
 
         return this;
     }
@@ -170,7 +170,7 @@ public final class ProgressMonitor {
      * 
      * @return the maximum value
      */
-    public Optional<Long> getMaximum() {
+    public OptionalLong getMaximum() {
         return maximum;
     }
 
@@ -178,7 +178,7 @@ public final class ProgressMonitor {
      * Increments the progress count by 1, {@link ProgressListener#progressChanged(ProgressEvent) publishing} a
      * {@link ProgressEvent} if necessary.
      * 
-     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #completed() completed}
+     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #complete() completed}
      * @throws IllegalArgumentException if the new count > {@link #getMaximum() maximum}
      * @return the new progress count
      */
@@ -192,7 +192,7 @@ public final class ProgressMonitor {
      * if necessary.
      * 
      * @param count the new progress count
-     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #completed() completed}
+     * @throws IllegalStateException    if this {@link ProgressMonitor} has {@link #complete() completed}
      * @throws IllegalArgumentException if {@code count} < {@link #getProgress() progress} or {@code count} >
      *                                  {@link #getMaximum() maximum}
      * @return this {@code ProgressMonitor} instance
@@ -244,7 +244,7 @@ public final class ProgressMonitor {
      * modify the state of this {@code ProgressMonitor} will result in an {@code IllegalStateException} until it is
      * {@link #reset() reset}.
      */
-    public void completed() {
+    public void complete() {
         if (done)
             return;
 
@@ -255,9 +255,9 @@ public final class ProgressMonitor {
     }
 
     /**
-     * Returns {@code true} if this {@code ProgressMonitor} has {@link #completed() completed}.
+     * Returns {@code true} if this {@code ProgressMonitor} has {@link #complete() completed}.
      * 
-     * @return {@code true} if this {@code ProgressMonitor} has {@link #completed() completed}
+     * @return {@code true} if this {@code ProgressMonitor} has {@link #complete() completed}
      */
     public boolean isDone() {
         return done;
@@ -290,10 +290,10 @@ public final class ProgressMonitor {
     }
 
     private static class Event implements ProgressEvent {
-        private final long           progress;
-        private final Optional<Long> maximum;
+        private final long         progress;
+        private final OptionalLong maximum;
 
-        Event(final long progress, final Optional<Long> maximum) {
+        Event(final long progress, final OptionalLong maximum) {
             this.progress = progress;
             this.maximum  = maximum;
         }
@@ -304,7 +304,7 @@ public final class ProgressMonitor {
         }
 
         @Override
-        public Optional<Long> getMaximum() {
+        public OptionalLong getMaximum() {
             return maximum;
         }
     }

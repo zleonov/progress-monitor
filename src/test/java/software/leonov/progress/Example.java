@@ -17,10 +17,14 @@ public class Example {
 
         System.out.println("Downloading " + from + " to " + to);
 
-        final ProgressMonitor progress = new ProgressMonitor().addProgressListener(new Percentage() {
+        final ProgressMonitor progress = new ProgressMonitor().addProgressListener(new PercentListener() {
 
             @Override
-            public void onUpdate(final String pct) {
+            public void progressChanged(final String pct) {
+//              System.out.print((pct.equals("1") ? "Downloaded " : "..") + pct + "%");
+//              
+//              if(pct.equals("100"))
+//                  System.out.println();                
                 System.out.println("Downloaded " + pct + "%");
             }
         });
@@ -46,7 +50,7 @@ public class Example {
             }
         }
 
-        progress.completed();
+        progress.complete();
     }
 
 }

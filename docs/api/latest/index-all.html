@@ -68,7 +68,7 @@
 <!--   -->
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a name="I:A">
+<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a name="I:A">
 <!--   -->
 </a>
 <h2 class="title">A</h2>
@@ -140,44 +140,38 @@
 <div class="block">Returns <code>true</code> if this <code>ProgressMonitor</code> has <a href="software/leonov/progress/ProgressMonitor.html#completed--"><code>completed</code></a>.</div>
 </dd>
 </dl>
-<a name="I:O">
-<!--   -->
-</a>
-<h2 class="title">O</h2>
-<dl>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#onUpdate-java.lang.String-">onUpdate(String)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
-<dd>
-<div class="block">Receives the formatted percent value as a calculation of the <a href="software/leonov/progress/ProgressMonitor.html#getProgress--"><code>progress</code></a> against
- the <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
-</dd>
-</dl>
 <a name="I:P">
 <!--   -->
 </a>
 <h2 class="title">P</h2>
 <dl>
-<dt><a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><span class="typeNameLink">Percentage</span></a> - Class in <a href="software/leonov/progress/package-summary.html">software.leonov.progress</a></dt>
+<dt><a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress"><span class="typeNameLink">PercentListener</span></a> - Class in <a href="software/leonov/progress/package-summary.html">software.leonov.progress</a></dt>
 <dd>
 <div class="block">A skeletal implementation of the <code>ProgressListener</code> interface which calculates the
  <a href="software/leonov/progress/ProgressMonitor.html#getProgress--"><code>progress</code></a> value as a percentage of the <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#Percentage--">Percentage()</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/PercentListener.html#PercentListener--">PercentListener()</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress">PercentListener</a></dt>
 <dd>
-<div class="block">Creates a new <a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><code>Percentage</code></a> <code>ProgressListener</code>.</div>
+<div class="block">Creates a new <a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress"><code>PercentListener</code></a> which formats the precent value to the nearest whole percent without decimal
+ places.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#Percentage-java.text.DecimalFormat-">Percentage(DecimalFormat)</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/PercentListener.html#PercentListener-java.text.DecimalFormat-">PercentListener(DecimalFormat)</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress">PercentListener</a></dt>
 <dd>
-<div class="block">Creates a new <a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><code>Percentage</code></a> <code>ProgressListener</code> which uses the specified <code>DecimalFormat</code> to format
- the percent value.</div>
+<div class="block">Creates a new <a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress"><code>PercentListener</code></a> which uses the specified <code>DecimalFormat</code> to format the percent value.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#Percentage-java.util.Locale-java.lang.String-">Percentage(Locale, String)</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/PercentListener.html#PercentListener-java.util.Locale-java.lang.String-">PercentListener(Locale, String)</a></span> - Constructor for class software.leonov.progress.<a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress">PercentListener</a></dt>
 <dd>
-<div class="block">Creates a new <a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress"><code>Percentage</code></a> <code>ProgressListener</code> which uses the specified <code>Locale</code> and <code>pattern</code>
- to format the percent value.</div>
+<div class="block">Creates a new <a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress"><code>PercentListener</code></a> which uses the specified <code>Locale</code> and
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html?is-external=true#applyPattern-java.lang.String-" title="class or interface in java.text"><code>pattern</code></a> to format the percent value.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="software/leonov/progress/Percentage.html#progressChanged-software.leonov.progress.ProgressEvent-">progressChanged(ProgressEvent)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/Percentage.html" title="class in software.leonov.progress">Percentage</a></dt>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/PercentListener.html#progressChanged-software.leonov.progress.ProgressEvent-">progressChanged(ProgressEvent)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress">PercentListener</a></dt>
 <dd>
 <div class="block">Receives a progress changed event.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="software/leonov/progress/PercentListener.html#progressChanged-java.lang.String-">progressChanged(String)</a></span> - Method in class software.leonov.progress.<a href="software/leonov/progress/PercentListener.html" title="class in software.leonov.progress">PercentListener</a></dt>
+<dd>
+<div class="block">Receives the formatted percent value as a calculation of the <a href="software/leonov/progress/ProgressMonitor.html#getProgress--"><code>progress</code></a> against
+ the <a href="software/leonov/progress/ProgressMonitor.html#getMaximum--"><code>maximum</code></a> value.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="software/leonov/progress/ProgressListener.html#progressChanged-software.leonov.progress.ProgressEvent-">progressChanged(ProgressEvent)</a></span> - Method in interface software.leonov.progress.<a href="software/leonov/progress/ProgressListener.html" title="interface in software.leonov.progress">ProgressListener</a></dt>
 <dd>
@@ -241,7 +235,7 @@
 <div class="block">Core classes and interfaces.</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;</div>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
 <!--   -->
@@ -289,6 +283,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2023. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2024. All rights reserved.</small></p>
 </body>
 </html>
